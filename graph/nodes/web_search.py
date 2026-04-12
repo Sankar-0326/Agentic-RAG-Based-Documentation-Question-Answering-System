@@ -1,0 +1,31 @@
+from typing import Any, Dict
+
+from langchain_core.documents import Document
+from langchain_tavily import TavilySearch
+
+from graph.state import GraphState
+
+
+web_search_tool = TavilySearch(max_results= 3)
+
+
+def web_search(state: GraphState) -> Dict[str, Any] :
+    print("---WEB SEARCH---")
+    question = state["question"]
+    documents = state["documents"]
+
+    docs = web_search_tool.invoke({"query": question})
+    web_results = "\n".join([doc["content"] for doc in docs])
+    web_result = Document(page_content= web_results)
+
+    if documents is not None :
+        documents.append(web_result)
+    else :
+        documents = [web_result]
+
+    return {"documents": documents, "question": question}
+
+
+
+
+
