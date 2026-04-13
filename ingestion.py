@@ -13,12 +13,12 @@ urls = [
 ]
 
 
-docs = [WebBaseLoader(url) for url in urls]
+docs = [WebBaseLoader(url).load() for url in urls]
 docs_list = [item for sublist in docs for item in sublist]
 
 
 text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
-    chunck_size= 250, chunck_overlap = 0 
+    chunk_size= 250, chunk_overlap = 0 
 )
 doc_splits = text_splitter.split_documents(docs_list)
 
@@ -34,6 +34,6 @@ vectorstore = Chroma.from_documents(
 retriever = Chroma(
     collection_name="rag-chroma",
     persist_directory= "./.chroma",
-    embedding= OpenAIEmbeddings()
+    embedding_function= OpenAIEmbeddings()
 ).as_retriever()
 
