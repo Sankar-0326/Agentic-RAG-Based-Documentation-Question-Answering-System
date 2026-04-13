@@ -10,7 +10,7 @@ llm = ChatOpenAI(temperature= 0)
 class GradeHallucinations(BaseModel) :
     """Binary score for hallucination present in generation answer."""
 
-    binary_score: bool = Field(
+    binary_score: str = Field(
         description= "Documents are relevant to the question, 'yes' or 'no'."
     )
 

@@ -1,5 +1,7 @@
 from dotenv import load_dotenv
 
+load_dotenv()
+
 from langgraph.graph import END, StateGraph
 
 from graph.chains.answer_grader import answer_grader
@@ -8,8 +10,6 @@ from graph.chains.router import question_router, RouteQuery
 from graph.consts import RETRIEVE, GRADE_DOCUMENTS, WEB_SEARCH, GENERATE
 from graph.nodes import retrieve, grade_documents, web_search, generate
 from graph.state import GraphState
-
-load_dotenv()
 
 
 def decide_to_generate(state: GraphState):
@@ -35,11 +35,11 @@ def grade_generation_grounded_in_documents_and_questions(state: GraphState) -> s
         {"documents": documents, "generation": generation}
     )
 
-    if hallucination_grade := score.binary_score:
+    if score.binary_score == "yes":
         print("---DECISION: GENERATION IS GROUNDED IN DOCUMENTS---")
         print("---GRADE GENERATION vs QUESTION---")
         score = answer_grader.invoke({"question": question, "generation": generation})
-        if answer_grade := score.binary_score:
+        if score.binary_score == "yes":
             print("---DECISION: GENERATION ADDRESSES QUESTION---")
             return "useful"
         else:
@@ -100,7 +100,7 @@ workflow.add_conditional_edges(
     }
     )
 
-workflow.add_edge(GENERATE, END)
+# workflow.add_edge(GENERATE, END)
 
 app = workflow.compile()
 
