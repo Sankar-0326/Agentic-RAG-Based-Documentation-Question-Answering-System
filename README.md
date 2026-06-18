@@ -73,7 +73,7 @@ Before retrieval even begins, the query is **classified** to decide the best str
 ### Installation
 
 ```bash
-git clone https://github.com/your-username/agentic-rag-docs-qa.git
+git clone https://github.com/Sankar-0326/Agentic-RAG-Based-Documentation-Question-Answering-System.git
 cd agentic-rag-docs-qa
 uv sync
 ```
